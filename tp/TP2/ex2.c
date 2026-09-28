@@ -14,7 +14,6 @@ void creer_fich_binaire(char* nom_fich, int n, int entier){
         exit(1);
     }
 
-
     if(lseek(fd, n * sizeof(int), SEEK_SET)==-1){
         perror(nom_fich);
         close(fd);
@@ -28,7 +27,6 @@ void creer_fich_binaire(char* nom_fich, int n, int entier){
     }
 
     close(fd);
-
 }
 
 int lire_nieme(char* nom_fich, int n){
