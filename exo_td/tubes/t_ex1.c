@@ -9,7 +9,7 @@
 clavier -> processus pere -> close(tube[0]) -> caractères -> processus fils -> close(tube[1]) -> stdout_fileno
 */
 
-int main(int argc, char* argv[]){
+int main(){
     char msg[512];
     printf("Entrez votre message : ");
     scanf("%s", msg);
@@ -33,7 +33,7 @@ int main(int argc, char* argv[]){
     if(pid>0){
         printf("Père démarre : \n");
         close(tube[0]);
-        write(tube[1], (void *)msg, sizeof(char)*( strlen(msg) + 1));
+        write(tube[1], (void *)msg, sizeof(char)*(strlen(msg) + 1));
         close(tube[1]);
         printf("Père se termine\n");
         exit(0);
@@ -43,7 +43,7 @@ int main(int argc, char* argv[]){
     while(read(tube[0], (void *)&car, sizeof(char))){
         printf("%c", car);
     }
-
+    
     close(tube[0]);
     printf("\n");
     printf("Fin du travail du fils \n");
