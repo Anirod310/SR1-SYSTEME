@@ -18,7 +18,7 @@ void ecrire_dans_stdout(char nom_fich[]){
     }
 
     while((nb_lus=read(fd, buffer, sizeof(buffer)))>0){
-       ssize_t nb_ecrits = write(STDERR_FILENO, buffer, nb_lus);
+       ssize_t nb_ecrits = write(STDOUT_FILENO, buffer, nb_lus);
 
        if(nb_ecrits != nb_lus){
         perror("Erreur d'écriture sur stdout");
