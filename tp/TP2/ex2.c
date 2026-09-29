@@ -11,19 +11,19 @@ void creer_fich_binaire(char* nom_fich, int n, int entier){
     int fd = open(nom_fich, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
     if(fd==-1){
         perror(nom_fich);
-        exit(1);
+        return;
     }
 
     if(lseek(fd, n * sizeof(int), SEEK_SET)==-1){
         perror(nom_fich);
         close(fd);
-        exit(2);
+        return;
     }
 
     if(write(fd, &entier, sizeof(entier))!=sizeof(int)){
         perror("Erreur écriture");
         close(fd);
-        exit(3);
+        return;
     }
 
     close(fd);
@@ -33,20 +33,20 @@ int lire_nieme(char* nom_fich, int n){
     int fd = open(nom_fich, O_RDONLY);
     if(fd==-1){
         perror(nom_fich);
-        exit(1);
+        return;
     }
 
     if(lseek(fd, n*sizeof(int), SEEK_SET)==-1){
         perror(nom_fich);
         close(fd);
-        exit(2);
+        return;
     }
 
     int valeur;
     if(read(fd, &valeur, sizeof(int))!=sizeof(int)){
         perror("Erreur lecture");
         close(fd);
-        exit(4);
+        return;
     }
 
     close(fd);
@@ -59,7 +59,7 @@ int main(int argc, char* argv[]){
     if (argc < 3 || argc > 4) {
         fprintf(stderr, "Usage lecture  : %s n fichier\n", argv[0]);
         fprintf(stderr, "Usage écriture : %s n entier fichier\n", argv[0]);
-        exit(5);
+        return;
     }
 
     char* endptr;
@@ -68,7 +68,7 @@ int main(int argc, char* argv[]){
     
     if(errno==ERANGE || endptr == argv[1] || *endptr != 0 || val_n < 0){
         fprintf(stderr, "Erreur, la valeur %s est invalide (entier >= 0 attendu)\n", argv[1]);
-        exit(6);
+        exit(1);
     }
 
     int n = (int)val_n;
