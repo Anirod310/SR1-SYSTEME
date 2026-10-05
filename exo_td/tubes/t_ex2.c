@@ -28,7 +28,6 @@ int main(){
     }
 
     int pid_fils_1 = fork();
-
     if(pid_fils_1==-1){
         perror("fork");
         exit(3);
@@ -59,7 +58,6 @@ int main(){
     }
 
     int pid_fils_2 = fork();
-
     if(pid_fils_2==-1){
         perror("fork");
         exit(3);
