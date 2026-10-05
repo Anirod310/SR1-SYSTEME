@@ -9,7 +9,7 @@
 clavier -> processus pere -> close(tube[0]) -> caractères -> processus fils -> close(tube[1]) -> stdout_fileno
 */
 
-int main(){
+int main(void){
     int tube[2];
     if(pipe(tube)==-1){
         perror("echec creation tube\n");

@@ -13,7 +13,7 @@ clavier -> processus pere -> close(tube[0]) -> caractères -> processus Alpha ->
             .....
 */
 
-int main(){
+int main(void){
 
     int tube_alpha[2];
     if(pipe(tube_alpha) == -1){
