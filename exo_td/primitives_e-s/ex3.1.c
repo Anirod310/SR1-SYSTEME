@@ -1,0 +1,55 @@
+#define _POSIX_C_SOURCE 202405L
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <unistd.h>
+
+int main(int argc, char* argv[]){
+    if(argc != 3){
+        fprintf(stderr,"Usage : %s fich_source fich_destination", argv[0]);
+        exit(1);
+        }
+        
+        int fd_source = open(argv[1], O_RDONLY);
+        if(fd_source==-1){
+            perror(argv[1]);
+            exit(2);
+        }
+
+        int fd_dest = open(argv[2], O_WRONLY | O_CREAT | O_TRUNC, S_IRGRP | S_IRUSR | S_IWUSR);
+        if(fd_dest==-1){
+            perror(argv[2]);
+            close(fd_source);
+            exit(2);
+        }
+
+
+        char buffer[512];
+        ssize_t octets_lus;
+        ssize_t octets_ecrits;
+
+        while((octets_lus = read(fd_source, buffer, sizeof(buffer)))>0){
+            if((octets_ecrits = write(fd_dest, buffer, octets_lus)) != octets_lus){
+                perror("Erreur d'écriture");
+                close(fd_source);
+                close(fd_dest);
+                exit(3);
+            }
+        }
+        if(octets_lus==-1){
+            perror(argv[1]);
+
+            close(fd_source);
+            close(fd_dest);
+
+            exit(4);
+        }
+
+        close(fd_source);
+        close(fd_dest);
+
+        exit(0);
+
+    }

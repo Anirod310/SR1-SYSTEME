@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": false,
-      "cwd": "/home/dori/fac_wsl/SR1/SR1-SYSTEME/exo_td/Primitives_E-S",
-      "program": "/home/dori/fac_wsl/SR1/SR1-SYSTEME/exo_td/Primitives_E-S/build/Debug/outDebug",
+      "cwd": "/home/dori/fac_wsl/SR1/SR1-SYSTEME/exo_td/primitives_e-s",
+      "program": "/home/dori/fac_wsl/SR1/SR1-SYSTEME/exo_td/primitives_e-s/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
