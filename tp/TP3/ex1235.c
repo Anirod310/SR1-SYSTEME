@@ -29,8 +29,8 @@ void Affiche_inode(struct stat* Infos){
         printf("inconnu ");
     }
 
-    struct passwd *pw = getpwuid(Infos->st_uid);
-    char* nom_proprio = pw->pw_name;
+    struct passwd *pwd = getpwuid(Infos->st_uid);
+    char* nom_proprio = pwd->pw_name;
 
     printf("%ld octets ", Infos->st_size);
     printf("%s ", nom_proprio);

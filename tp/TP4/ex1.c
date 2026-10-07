@@ -29,6 +29,7 @@ int main(void){
         for(int i=1; i<=N; i++ ){
             if((write(tube[1], &i, sizeof(i))) == -1){
                 perror("Erreur ecriture");
+                close(tube[1]);
                 exit(4);
             }
             sleep(1);   

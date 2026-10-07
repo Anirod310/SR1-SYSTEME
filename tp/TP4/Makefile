@@ -3,4 +3,4 @@ CC = gcc
 SRC= $(wildcard *.c *.h)
 
 .c:
-	${CC} -std=c11 -pedantic -Wall -Werror -o $@ $<
+	${CC} -std=c11 -pedantic -Wall -Werror -o $@ $< -lm
