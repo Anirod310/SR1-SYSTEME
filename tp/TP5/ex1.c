@@ -10,6 +10,13 @@
 
 #define N 3
 
+typedef struct{
+    char chemin[1024];
+    ino_t inode;
+    off_t taille;
+
+} ReponseFichier;
+
 void parcourir_fichiers(char* rep, int* tube){
 
     DIR* dir = opendir(rep);
@@ -27,6 +34,7 @@ void parcourir_fichiers(char* rep, int* tube){
             snprintf(chemin, sizeof(chemin), "%s/%s", rep, Elem->d_name);
             if((lstat(chemin, &Infos))==-1){
                 perror(chemin);
+                continue;
             }
             if(S_ISREG(Infos.st_mode)){
                 if((write(tube[1], chemin, sizeof(chemin)))==-1){
@@ -72,31 +80,41 @@ int main(int argc, char* argv[]){
             close(pere_fils_fich[1]);
             close(fils_fich_fils_rep[0]);
             
-            char buffer_chemin[1024];
+            char chemin[1024];//désignation du fichier
 
-            while(read(pere_fils_fich[0], buffer_chemin[1024], sizeof(buffer_chemin))>0){
-                int fd = open(buffer_chemin, O_RDONLY);
+            while(read(pere_fils_fich[0], chemin, sizeof(chemin))>0){
+                int fd = open(chemin, O_RDONLY);
                 if (fd == -1) {
-                    perror(buffer_chemin);
+                    perror(chemin);
+                    continue;
                 }
 
                 ssize_t taille_magic = strlen(argv[1]);
                 char buffer[taille_magic+1];
-                ssize_t octets_lus = read(fd, buffer, sizeof(buffer));
+                ssize_t octets_lus = read(fd, buffer, taille_magic);//Pas sizeof(buffer) parce que buffer vaut taille_magic+1
 
                 if(octets_lus == taille_magic){
-                    buffer[octets_lus] == '\0';
-                    if (strncmp(buffer, argv[1], taille_magic) == 0){
+                    if (memcmp(buffer, argv[1], taille_magic) == 0){
                         struct stat Infos;
-                        if((lstat(buffer_chemin, &Infos))==-1){
-                            perror(buffer_chemin);
-                            //....
+                        if((lstat(chemin, &Infos))==-1){
+                            perror(chemin);
+                        }
+                        else{
+                            ReponseFichier rep;
+                            snprintf(rep.chemin, sizeof(rep.chemin), "%s", chemin);
+                            rep.inode = Infos.st_ino;
+                            rep.taille = Infos.st_size;
+
+                            write(fils_fich_fils_rep[1], &rep, sizeof(ReponseFichier));
                         }
                     }
                 }
 
+                close(fd);
             }
-
+            
+            close(pere_fils_fich[0]);
+            close(fils_fich_fils_rep[1]);
             exit(0);
         }
 
@@ -112,7 +130,14 @@ int main(int argc, char* argv[]){
         close(pere_fils_fich[0]);
         close(pere_fils_fich[1]);
         close(fils_fich_fils_rep[1]);
-        //...
+        
+        ReponseFichier rep;
+
+        while(read(fils_fich_fils_rep[0], &rep, sizeof(ReponseFichier))>0){
+            printf("Fichier trouvé : %s | Inode : %lu | Taille : %ld octets\n", rep.chemin, (unsigned long)rep.inode, (long)rep.taille);
+        }
+
+        close(fils_fich_fils_rep[0]);
         exit(0);
     }
 
