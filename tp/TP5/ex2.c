@@ -63,10 +63,12 @@ int main(int argc, char* argv[]){
     if(argc == 3){
         snprintf(magic_number, sizeof(magic_number), "%s", argv[1]);
         snprintf(designation, sizeof(designation), "%s", argv[2]);
-    }else
-    {
+    }else if(argc == 5 && (strcmp(argv[1], "-v") == 0)){
         snprintf(magic_number, sizeof(magic_number), "%s", argv[3]);
         snprintf(designation, sizeof(designation), "%s", argv[4]);
+    }else{
+        fprintf(stderr,"Usage : %s [-v cmd] magic_number designation_rep\n", argv[0]);
+        exit(1);  
     }
 
     int pere_fils_fich[2];
